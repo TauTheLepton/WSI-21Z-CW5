@@ -63,10 +63,15 @@ def getDList(data):
 class NeuralNetwork:
 
     def __init__(self, learn_data, hidden_num, output_num):
+        """
+        learn_data: array-like with data to learn from
+        hidden_num: number fo neurons in hidden layer of neural network
+        output_num: number fo neurons in output layer of neural network
+        """
         d_idx = getDIdx(learn_data)
         learn_data = np.array(learn_data)
         self.inputs = learn_data[:, :d_idx]
-        self.outputs_correct = learn_data[:, d_idx]
+        self.outputs_correct = learn_data[:, d_idx][None, :].T
         self.outputs = np.zeros(self.outputs_correct.shape)
         lines_num, cols_num = self.inputs.shape
         self.weights1 = np.ones((cols_num, hidden_num)) * 0.5
@@ -84,15 +89,18 @@ class NeuralNetwork:
     # calculates values of hidden and output layers
     def feedForward(self):
         self.hidden = self.sigmoid(np.dot(self.inputs, self.weights1))
-        self.outputs = self.sigmoid(np.dot(self.hidden, self.weights2))
+        self.outputs = self.sigmoid(np.dot(self.hidden, self.weights2)).T
 
     # calculates error and adds it to errors list
     def calculateError(self):
         a = self.outputs - self.outputs_correct
-        self.errors.append(np.dot(a, a))
+        self.errors.append(np.dot(a.T, a)[0][0])
 
     # does whole back propagation (idk how it works)
     def backPropagation(self):
+        a=np.array([1, 2, 3, 4])
+        b=np.array([[1], [2], [3], [4]])
+        self.outputs = self.outputs.T
         d_weights2 = np.dot(self.hidden.T, (2 * (self.outputs_correct - self.outputs) * self.sigmoidDer(self.outputs)))
         d_weights1 = np.dot(self.inputs.T, (np.dot(2 * (self.outputs_correct - self.outputs) \
             * self.sigmoidDer(self.outputs), self.weights2.T) * self.sigmoidDer(self.hidden)))
@@ -121,7 +129,7 @@ def test(filename, coef):
         [345, 678, 12]]
     )
     NN = NeuralNetwork(learn_data, 4, 1)
-    NN.train(10)
+    NN.train(100)
     print(NN.errors)
 
 def main():
