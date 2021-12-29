@@ -89,7 +89,7 @@ class NeuralNetwork:
     # calculates values of hidden and output layers
     def feedForward(self):
         self.hidden = self.sigmoid(np.dot(self.inputs, self.weights1))
-        self.outputs = self.sigmoid(np.dot(self.hidden, self.weights2)).T
+        self.outputs = self.sigmoid(np.dot(self.hidden, self.weights2))
 
     # calculates error and adds it to errors list
     def calculateError(self):
@@ -98,9 +98,6 @@ class NeuralNetwork:
 
     # does whole back propagation (idk how it works)
     def backPropagation(self):
-        a=np.array([1, 2, 3, 4])
-        b=np.array([[1], [2], [3], [4]])
-        self.outputs = self.outputs.T
         d_weights2 = np.dot(self.hidden.T, (2 * (self.outputs_correct - self.outputs) * self.sigmoidDer(self.outputs)))
         d_weights1 = np.dot(self.inputs.T, (np.dot(2 * (self.outputs_correct - self.outputs) \
             * self.sigmoidDer(self.outputs), self.weights2.T) * self.sigmoidDer(self.hidden)))
