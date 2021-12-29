@@ -62,13 +62,14 @@ def getDList(data):
 # class doing all neural network calculations and storing its data
 class NeuralNetwork:
 
-    def __init__(self, learn_data, input_num, hidden_num, output_num):
+    def __init__(self, learn_data, hidden_num, output_num):
         d_idx = getDIdx(learn_data)
         learn_data = np.array(learn_data)
         self.inputs = learn_data[:, :d_idx]
         self.outputs_correct = learn_data[:, d_idx]
-        size = np.size(self.inputs, 1)
-        self.weights1 = np.ones((input_num, hidden_num)) * 0.5
+        self.outputs = np.zeros(self.outputs_correct.shape)
+        lines_num, cols_num = self.inputs.shape
+        self.weights1 = np.ones((cols_num, hidden_num)) * 0.5
         self.weights2 = np.ones((hidden_num, output_num)) * 0.5
         self.errors = []
 
@@ -113,13 +114,13 @@ def test(filename, coef):
     learn_data, test_data = divideLearnTestData(data, coef)
     # tests some basics
     learn_data = np.array(
-        [[2, 3, 4, 5],
-        [534, 12, 34, 678],
-        [7, 7, 12, 78],
-        [45, 678, 12, 37],
-        [345, 678, 12, 56]]
+        [[2, 3, 4],
+        [534, 12, 34],
+        [7, 7, 12],
+        [45, 678, 12],
+        [345, 678, 12]]
     )
-    NN = NeuralNetwork(learn_data, 3, 4, 1)
+    NN = NeuralNetwork(learn_data, 4, 1)
     NN.train(10)
     print(NN.errors)
 
