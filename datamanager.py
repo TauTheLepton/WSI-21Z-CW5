@@ -27,8 +27,7 @@ def convertToNumpyArray(data):
 
 # Array normalization
 def normalize(array: np.array):
-    return np.interp(array, (array.min(), array.max()), (0, +1))
-    #return np.interp(array, (array.min(), array.max()), (-1, +1))
+    return np.interp(array, (array.min(), array.max()), (0, 1)) # TODO [0,1] czy [-1, 1] ?
 
 
 # returns index of element d, so in this case the last one

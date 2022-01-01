@@ -1,29 +1,31 @@
 from neuralnetwork import *
 from aivalidation import *
 
-
-# Options and settings
+# Data
 red = 'winequality-red.csv'
 white = 'winequality-white.csv'
-hidden_layer_size = 2
+# Options and settings
+hidden_layer_size = 2 # TODO 2 dla normalizacji [0, 1] i sigmoidalnej w ostatniej warstwie, 16 dla [-1,1], bez sigmo i z inną funkcją straty
 output_layer_size = 1
-epoki = 12000  # TODO zmienić na na angielski (nie wiem jak to po angielsku będzie)
+era = 12000  # TODO nie wiem jak w tym przypadku tłumaczy się epoka na ang, dlatego dałem era
+learning_param = 0.7
 # End of options and settings
+
+np.random.seed(1)  # TODO seed dodany do testów, usunąć go potem
 
 
 def main():
-    test(red, 0.6)
+    test(red, 0.6, learning_param) #0,7 0,3
 
 
 # tests neural network
-def test(filename, coef):
+def test(filename, coef, alpha):
     # imports data from file
     data, header = read_file(filename)
-    data = convertDataToFloat(data)
-    data = convertToNumpyArray(data)
+    data = convertToNumpyArray(convertDataToFloat(data))
 
     perceptron = NeuralNetwork(data, hidden_layer_size, output_layer_size)
-    perceptron.train(epoki)
+    perceptron.train(era, alpha)
     loss, score, predicted, actual = algorithm_validation(data, two_subset_divide, coef, perceptron)
 
     print('Compare between predicted and original:')

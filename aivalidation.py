@@ -14,7 +14,7 @@ def make_subset(dataset, req_size):
         index = randrange(len(dataset))
         subset.append(dataset[-1])
         dataset = dataset[:-1]
-    return convertToNumpyArray(subset) # TODO leniwa i małowydajna naprawa problemu, naprawić to
+    return convertToNumpyArray(subset) # TODO zamienić to potem na coś bardziej wydajnego (w funkcjach niżej też)
 
 
 def two_subset_divide(data, degree):
@@ -33,7 +33,7 @@ def cross_validation(dataset, k):
     for i in range(k):
         subset = make_subset(new_set, set_size)
         subsets.append(subset)
-    return convertToNumpyArray(subsets) # TODO jak wyżej, to jest też do poprawy w innych funkcjach
+    return convertToNumpyArray(subsets)
 
 
 def count_guessed_right(original, predicted):
