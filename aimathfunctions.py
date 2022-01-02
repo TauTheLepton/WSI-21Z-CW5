@@ -3,11 +3,13 @@ import numpy as np
 
 # calculates value of sigmoid function
 def sigmoid(x):
+    # return np.tanh(x)
     return 1 / (1 + np.exp(-x))
 
 
 # calculates value of derivative of sigmoid function
 def sigmoid_der(x):
+    # return 1 - np.tanh(x) ** 2
     return x * (1 - x)  # TODO funkcja straty dla [0, 1]
     #s = 1 / (1 + np.exp(-x))
     #return s * (1 - s)

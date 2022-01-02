@@ -1,5 +1,6 @@
 from neuralnetwork import *
 from aivalidation import *
+from matplotlib import pyplot as plt
 
 # Data
 red = 'winequality-red.csv'
@@ -38,6 +39,9 @@ def test(filename, coef, alpha):
     print(f'If we rounded output, we guessed right {score_rounded * 100}%')
     # print(f'Size of predicted set is: {len(predicted)}')
     # print(f'Size of data is {len(data)}')
+    plt.plot(perceptron.errors)
+    plt.title('Neural Network errors')
+    plt.show()
 
 
 if __name__ == '__main__':
