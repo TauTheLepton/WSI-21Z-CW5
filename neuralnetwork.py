@@ -1,5 +1,6 @@
 from datamanager import *
 from aimathfunctions import *
+from aivalidation import *
 
 
 # class doing all neural network calculations and storing its data
@@ -79,8 +80,15 @@ class NeuralNetwork:
         return self.outputs
 
     # calculates error and adds it to errors list
-    def calculate_error(self):  # TODO można przemyśleć użycie mse tutaj
+    def calculate_error(self):
         a = self.outputs - self.outputs_correct
         self.errors.append(np.dot(a.T, a)[0][0])
+
         #a = loss(self.outputs, self.outputs_correct)
         #self.errors.append(np.dot(a.T, a)[0][0])
+
+        #predicted = np.interp(self.outputs, (self.outputs.min(), self.outputs.max()), (3, 9))
+        #original = np.interp(self.outputs_correct, (self.outputs_correct.min(), self.outputs_correct.max()), (3,9))
+        #mn_loss = mean_loss(original, predicted, 2)
+        #ms_loss = mse_loss(mn_loss, 2)
+        #self.errors.append(ms_loss)
