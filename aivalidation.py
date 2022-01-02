@@ -60,8 +60,8 @@ def mse_loss(mean_loses, k):
     return 1/k * sum(mean_loses)
 
 
-def algorithm_validation(dataset, divide_type, degree, ai):
-    train_set, test_set = divide_type(dataset, degree)
+def algorithm_validation(test_set, ai):
+    # train_set, test_set = divide_type(dataset, degree)
 
     mean_loses = []
     guessed_right = []
