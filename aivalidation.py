@@ -36,12 +36,20 @@ def cross_validation(dataset, k):
     return convertToNumpyArray(subsets)
 
 
-def count_guessed_right(original, predicted):
+def count_ratio_guessed_right(original, predicted):
     right = 0
     for i in range(len(original)):
         if original[i] == predicted[i]:
             right += 1
     return right / float(len(original))
+
+
+def count_rounded_ratio_guessed_right(original_list, predicted_list):
+    right = 0
+    for original, predicted in zip(original_list, predicted_list):
+        if round(float(original)) == round(float(predicted)):
+            right += 1
+    return right / float(len(original_list))
 
 
 def count_rights(rights):
@@ -63,19 +71,14 @@ def mse_loss(mean_loses, k):
 def algorithm_validation(test_set, ai):
     # train_set, test_set = divide_type(dataset, degree)
 
-    mean_loses = []
-    guessed_right = []
-
     predicted = ai.predict(test_set)
     predicted = np.interp(predicted, (predicted.min(), predicted.max()), (3, 9))
 
     actual = get_original_grades(test_set)
-    mean_loses.append(mean_loss(actual, predicted, 2))
-    guessed_right.append(count_guessed_right(actual, predicted))
+    mean_loses = mean_loss(actual, predicted, 2)
+    guessed_right = count_ratio_guessed_right(actual, predicted)
+    guessed_rounded = count_rounded_ratio_guessed_right(actual, predicted)
 
-    percent_score = count_rights(guessed_right)
     loss_score = mse_loss(mean_loses, 2)
 
-    return loss_score, percent_score, predicted, actual
-
-
+    return loss_score, guessed_right, guessed_rounded, predicted, actual
