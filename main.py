@@ -31,10 +31,11 @@ def test(filename, coef, alpha):
     loss, score_right, score_rounded, predicted, actual = algorithm_validation(test_data, perceptron)
 
     # print('Compare between predicted and original:')
-    # for i in range(len(predicted)):
-    #     print(f'Predicted: {predicted[i]} Original: {actual[i]}')
-    print(f'Our loss is: {loss}, and our score is {score_right * 100}')
-    print(f'Score rounded is {score_rounded * 100}')
+    #for i in range(len(predicted)):
+        #print(f'Predicted: {predicted[i]} Original: {actual[i]}')
+    print(f'Story of changes: {perceptron.errors[::100]}')
+    print(f'We missed about (loss): {loss} class, and we guessed right {score_right * 100}%')
+    print(f'If we rounded output, we guessed right {score_rounded * 100}%')
     # print(f'Size of predicted set is: {len(predicted)}')
     # print(f'Size of data is {len(data)}')
 

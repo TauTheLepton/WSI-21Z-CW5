@@ -10,14 +10,26 @@ class NeuralNetwork:
     output_num: number of neurons in output layer of neural network //tak samo jak wyżej?
     """
     def __init__(self, learn_data, hidden_num, output_num):
-        d_idx = getDIdx(learn_data)
-        self.inputs = normalize(learn_data[:, :d_idx])
+        self.inputs = self.setup_inputs(learn_data)
         self.hidden = []
-        self.outputs_correct = normalize(learn_data[:, d_idx][None, :].T)
-        self.outputs = np.zeros(self.outputs_correct.shape)
+        self.outputs, self.outputs_correct = self.setup_outputs(learn_data)
         self.weights1, self.weights2 = self.setup_weights(hidden_num, output_num)
         self.errors = []
         self.values = []
+
+    def setup_inputs(self, data): # TODO zamienić na dekorator
+        d_idx = getDIdx(data)
+        inputs = normalize(data[:, :d_idx])
+        return inputs
+        #bias = np.ones((len(inputs), 1))
+        #return np.append(inputs, bias, 1)
+
+    def setup_outputs(self, data):
+        d_idx = getDIdx(data)
+        outputs_correct = normalize(data[:, d_idx][None, :].T)
+        outputs = np.zeros(outputs_correct.shape)
+        return outputs, outputs_correct
+
 
     def setup_weights(self, hidden_num, output_num):
         cols_num = self.inputs.shape[1]
@@ -58,8 +70,7 @@ class NeuralNetwork:
 
     # make prediction based on traning
     def predict(self, data):
-        index = len(self.inputs[0])
-        self.inputs = normalize(data[:, :index])
+        self.inputs = self.setup_inputs(data)
         self.feed_forward()
         return self.outputs
 
