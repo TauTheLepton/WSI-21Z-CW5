@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 
+from settings import *
 
 # returns list of tuples as data with onli the data and header is one tuple with names of elements in tuples
 def read_file(file_name):
@@ -27,7 +28,7 @@ def convertToNumpyArray(data):
 
 # Array normalization
 def normalize(array: np.array):
-    return np.interp(array, (array.min(), array.max()), (0, 1)) # TODO [0,1] czy [-1, 1] ?
+    return np.interp(array, (array.min(), array.max()), (A, B)) # TODO [0,1] czy [-1, 1] ?
 
 
 # returns index of element d, so in this case the last one

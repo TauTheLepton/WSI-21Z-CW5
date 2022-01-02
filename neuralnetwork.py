@@ -36,8 +36,10 @@ class NeuralNetwork:
         return outputs, outputs_correct
 
 
-    def setup_weights(self, hidden_num, output_num):
+    def setup_weights(self, hidden_number, output_number):
         cols_num = self.inputs.shape[1]
+        hidden_num = hidden_number + 1 if self.bias else hidden_number
+        output_num = output_number
         weights1 = np.random.uniform(
             low=(-1 / np.sqrt(self.inputs.shape[1])),
             high=(1 / np.sqrt(self.inputs.shape[1])), size=(cols_num, hidden_num))
@@ -48,8 +50,11 @@ class NeuralNetwork:
     def feed_forward(self):
         #self.inputs = ... # TODO w książce było o obliczeniach na samych inputach
         self.hidden = sigmoid(np.dot(self.inputs, self.weights1))
-        self.outputs = sigmoid(np.dot(self.hidden, self.weights2))
-        #self.outputs = np.dot(self.hidden, self.weights2) # TODO użyć jakiejkolwiek funkcji aktywacji?
+        if self.bias:
+            self.hidden[:, -1] = 1
+            self.outputs = uf(np.dot(self.hidden, self.weights2))
+        else:
+            self.outputs = sigmoid(np.dot(self.hidden, self.weights2))
 
     def gradient_descent(self):
         outputs_errors = loss_der(self.outputs, self.outputs_correct)
