@@ -9,20 +9,24 @@ class NeuralNetwork:
     hidden_num: number of neurons in hidden layer of neural network // change to hidden_layer_size?
     output_num: number of neurons in output layer of neural network //tak samo jak wyżej?
     """
-    def __init__(self, learn_data, hidden_num, output_num):
+    def __init__(self, learn_data, hidden_num, output_num, bias=False):
+        self.bias = bias
         self.inputs = self.setup_inputs(learn_data)
         self.hidden = []
         self.outputs, self.outputs_correct = self.setup_outputs(learn_data)
         self.weights1, self.weights2 = self.setup_weights(hidden_num, output_num)
         self.errors = []
         self.values = []
+        
 
     def setup_inputs(self, data): # TODO zamienić na dekorator
         d_idx = getDIdx(data)
         inputs = normalize(data[:, :d_idx])
-        return inputs
-        #bias = np.ones((len(inputs), 1))
-        #return np.append(inputs, bias, 1)
+        if not self.bias:
+            return inputs
+        else:
+            bias = np.ones((len(inputs), 1))
+            return np.append(inputs, bias, 1)
 
     def setup_outputs(self, data):
         d_idx = getDIdx(data)
@@ -78,3 +82,5 @@ class NeuralNetwork:
     def calculate_error(self):  # TODO można przemyśleć użycie mse tutaj
         a = self.outputs - self.outputs_correct
         self.errors.append(np.dot(a.T, a)[0][0])
+        #a = loss(self.outputs, self.outputs_correct)
+        #self.errors.append(np.dot(a.T, a)[0][0])
