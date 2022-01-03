@@ -16,7 +16,7 @@ def make_subset(dataset, req_size):
         dataset = dataset[:-1]
     return convertToNumpyArray(subset) # TODO zamienić to potem na coś bardziej wydajnego (w funkcjach niżej też)
 
-
+# divides data into two data sets with given coefficient
 def two_subset_divide(data, degree):
     learn_data = convertToNumpyArray(data[:int(len(data) * degree)])
     test_data = convertToNumpyArray(data[int(len(data) * degree):])
@@ -35,7 +35,7 @@ def cross_validation(dataset, k):
         subsets.append(subset)
     return convertToNumpyArray(subsets)
 
-
+# calculates ratio of classes guessed right
 def count_ratio_guessed_right(original, predicted):
     right = 0
     for i in range(len(original)):
@@ -43,7 +43,7 @@ def count_ratio_guessed_right(original, predicted):
             right += 1
     return right / float(len(original))
 
-
+# calculates ratio of classes guessed right with rounding
 def count_rounded_ratio_guessed_right(original_list, predicted_list):
     right = 0
     for original, predicted in zip(original_list, predicted_list):
@@ -68,11 +68,9 @@ def mse_loss(mean_loses, k):
     return 1/k * sum(mean_loses)
 
 
-def algorithm_validation(test_set, ai):
-    # train_set, test_set = divide_type(dataset, degree)
-
+def algorithm_validation(test_set, ai, bounds):
     predicted = ai.predict(test_set)
-    predicted = np.interp(predicted, (predicted.min(), predicted.max()), (3, 9))
+    predicted = np.interp(predicted, (predicted.min(), predicted.max()), bounds)
 
     actual = get_original_grades(test_set)
     mean_loses = mean_loss(actual, predicted, 2)

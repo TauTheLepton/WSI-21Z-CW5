@@ -11,4 +11,3 @@ bias = False # Use biases (True) or not (False)
 A = 0 # Lower bound for input scaling
 B = 1 # Upper bound for input scaling
 # End of options and settings
-

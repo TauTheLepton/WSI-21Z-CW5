@@ -9,6 +9,7 @@ class NeuralNetwork:
     learn_data: array-like with data to learn from, size of learn data decide about number of input neurons
     hidden_num: number of neurons in hidden layer of neural network // change to hidden_layer_size?
     output_num: number of neurons in output layer of neural network //tak samo jak wyżej?
+    bias: bool, if True adds bias to neural network
     """
     def __init__(self, learn_data, hidden_num, output_num, bias=False):
         self.bias = bias
@@ -18,8 +19,8 @@ class NeuralNetwork:
         self.weights1, self.weights2 = self.setup_weights(hidden_num, output_num)
         self.errors = []
         self.values = []
-        
 
+    # sets up inputs
     def setup_inputs(self, data): # TODO zamienić na dekorator
         d_idx = getDIdx(data)
         inputs = normalize(data[:, :d_idx])
@@ -29,13 +30,14 @@ class NeuralNetwork:
             bias = np.ones((len(inputs), 1))
             return np.append(inputs, bias, 1)
 
+    # sets up outputs
     def setup_outputs(self, data):
         d_idx = getDIdx(data)
         outputs_correct = normalize(data[:, d_idx][None, :].T)
         outputs = np.zeros(outputs_correct.shape)
         return outputs, outputs_correct
 
-
+    # sets up weights
     def setup_weights(self, hidden_number, output_number):
         cols_num = self.inputs.shape[1]
         hidden_num = hidden_number + 1 if self.bias else hidden_number
@@ -56,6 +58,7 @@ class NeuralNetwork:
         else:
             self.outputs = sigmoid(np.dot(self.hidden, self.weights2))
 
+    # calculates deltas from gradient descent method
     def gradient_descent(self):
         outputs_errors = loss_der(self.outputs, self.outputs_correct)
         outputs_delta = outputs_errors * sigmoid_der(self.outputs)
@@ -65,7 +68,7 @@ class NeuralNetwork:
 
         return outputs_delta, hidden_delta
 
-    # does whole back propagation
+    # calculates new weights with gradient descent method
     def back_propagation(self, alpha):
         weights2_delta, weights1_delta = self.gradient_descent()
         self.weights2 -= alpha * np.dot(self.hidden.T, weights2_delta)
